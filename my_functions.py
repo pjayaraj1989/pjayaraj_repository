@@ -1,5 +1,9 @@
 import os
 
+#global vars
+op=[]
+	
+
 #add elements
 def Add(*args):
     op=0
@@ -67,17 +71,19 @@ def Sort(**args):
     
 #read folder recursively
 def ReadFolderTree(root,type):
-	print 'Reading ' + root
+	global op
+	print 'Checking for {0} files inside {1}'.format(type,root)
 	contents=os.listdir(root)
 	if len(contents) > 0:
 		for f in contents:
 			temp=r'{0}\{1}'.format(root,f)
 			if os.path.isfile(temp):
 				if temp.endswith(type):
-					print temp
+					op.append(temp)
 			if os.path.isdir(temp):
 				ReadFolderTree(temp, type)
-    
+	return op
+	
 #main
 def main():       
 	input=[1,2,3,6,9,0,8,0,8,1]
@@ -85,8 +91,10 @@ def main():
     #print GetIndex(list=['zero','one', 'two'], element='one')
     #print GetMaxMin(input)[0]
 	#print Sort(ord='inc',array=input)
-	f=r'C:\Test'
-	print ReadFolderTree(f,'.txt')
-    
+	f=r'C:\Users\pjayaraj\Desktop\MyScripts'
+	op = ReadFolderTree(f,'.py')
+	for f in op:
+		print f
+	
 if __name__== "__main__":
     main()
