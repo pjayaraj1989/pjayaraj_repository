@@ -1,3 +1,4 @@
+import os
 
 #add elements
 def Add(*args):
@@ -64,15 +65,28 @@ def Sort(**args):
             array.remove(max)
     return op
     
+#read folder recursively
+def ReadFolderTree(root,type):
+	print 'Reading ' + root
+	contents=os.listdir(root)
+	if len(contents) > 0:
+		for f in contents:
+			temp=r'{0}\{1}'.format(root,f)
+			if os.path.isfile(temp):
+				if temp.endswith(type):
+					print temp
+			if os.path.isdir(temp):
+				ReadFolderTree(temp, type)
     
 #main
 def main():       
-    input=[1,2,3,6,9,0,8,0,8,1]
+	input=[1,2,3,6,9,0,8,0,8,1]
     #print GetPairsForSum(input, 9)
     #print GetIndex(list=['zero','one', 'two'], element='one')
     #print GetMaxMin(input)[0]
-    print Sort(ord='inc',array=input)
-    
+	#print Sort(ord='inc',array=input)
+	f=r'C:\Test'
+	print ReadFolderTree(f,'.txt')
     
 if __name__== "__main__":
     main()
