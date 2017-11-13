@@ -1,8 +1,143 @@
 import os
+import subprocess
+import sys
+import shutil
+
+ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 
 #global vars
-op=[]
+op=[]	
+
+#send mail -- > EDIT
+def SendMail(sender, recipientsList, htmlmsg, subject):
+	text = '@amd.com'
+	#recipients list
+	#recipientsList = ['pranoy.jayaraj','prabhu.ranganathan']
 	
+	recipients = []
+
+	for rec in recipientsList:
+		rec+=text		
+		recipients.append(rec)
+			
+	body = htmlmsg
+	msg = MIMEText(body, 'html')
+	msg['Subject'] = subject
+	msg['From'] = sender
+	msg['To'] = ", ".join(recipients)
+		
+	#sending
+	session = smtplib.SMTP('10.180.168.6')
+	session.ehlo()
+	session.starttls()
+	session.ehlo
+	print 'Sending to recipients:-'
+	print recipients
+	send_it = session.sendmail(sender, recipients, msg.as_string())
+	session.quit()
+
+#read bin contents
+def ReadBinaryFile (File):
+  if (os.path.exists(File) == False):
+    print "\nError :", File, " does not exist"
+    return (None)
+
+  try:
+    f = open (File,'rb')
+  except:
+    Error_Exit('File not found: {0}'.format(File) )
+    
+  lines = f.read()
+  f.close()
+  return lines
+
+#substring
+def find_between(s, first, last):
+	try:
+		start = s.index(first) + len(first)
+		end = s.index(last, start)
+		return s[start:end]
+	except ValueError:
+		return ''
+
+#copy
+def copyFile2(src, dest):
+    try:
+		shutil.copy(src, dest)
+    # eg. src and dest are the same file
+    except shutil.Error as e:		
+		print('Error: %s' % e)
+    # eg. source or destination doesn't exist
+    except IOError as e:		
+		print('Error: %s' % e.strerror)
+
+#log into text file
+def Log(file,msg):
+	f=open(file,'w+')
+	f.write(msg)
+	f.write('\n')
+	f.close()
+
+#execute
+def execute(command):
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    # Poll process for new output until finished
+    while True:
+        nextline = process.stdout.readline()
+        if nextline == '' and process.poll() is not None:
+            break
+        sys.stdout.write(nextline)
+        sys.stdout.flush()
+	output,err = process.communicate()
+	exitCode = process.returncode
+	print 'Exit code:-' + str(exitCode)
+	
+	if (exitCode == 0):
+        return output
+	else:
+		raise ProcessException(command, exitCode, output)
+	
+	return output,err
+
+#create an html table from a list for RAVEN NIGHTLY BUILD
+def CreateHTMLTable(list, header):
+	res=''
+	html='<html><head><body>'
+	html+='<table border=\"2\" cellpadding=\'5\' cellspacing=\'1\''
+	html+='style=\'border: solid 2px green; font-size: small;\'>'
+	html+='<tr height=\'1px\' align=\'justify\' valign=\'top\' bgcolor=\'gray\'>'
+	#add header
+	for h in header:
+		html+='<th>{0}</th>'.format(h)
+	html+='</tr>'
+	#add contents
+	for l in list:
+		html+='<tr'
+		for m in l:
+			if 'pass' in l:
+				res = 'pass'
+			else:
+				res='fail'
+		
+		if res == 'pass':
+			html+=' style="background-color:white;">'
+			for member in l:
+				if 'pass' in member:
+					html+='<td><font color="green">{0}</font></td>'.format(member.upper())
+				else:
+					html+='<td><font color="black">{0}</font></td>'.format(member)
+		else:
+			html+=' style="background-color:white;">'
+			for member in l:
+				if 'fail' in member:
+					html+='<td><font color="red">{0}</font></td>'.format(member.upper())
+				else:
+					html+='<td><font color="black">{0}</font></td>'.format(member)
+				
+		html+='</tr>'	
+	html+='</table>'	
+	return html
 
 #add elements
 def Add(*args):
