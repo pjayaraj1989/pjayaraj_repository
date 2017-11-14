@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
-#sender, [recipientsList], htmlmsg, subject, serverIP, attachment
+#sender, [recipientsList], htmlmsg, subject, serverIP, attachment 
 def sendmail(**kwargs):
 	try:
 		HasImg=False
