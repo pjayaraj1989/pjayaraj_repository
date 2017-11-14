@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 import smtplib
 import requests
 import random
+import datetime
 
 ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 
@@ -224,7 +225,8 @@ def ReadFolderTree(root,type):
 	return op
 
 #gen wkeycodes from https://svnweb.freebsd.org/csrg/share/dict/words?view=co&content-type=text/plain
-def GenerateCode():
+#file=file to log the created passwords
+def GenerateCode(file):
 	url = 'https://svnweb.freebsd.org/csrg/share/dict/words?view=co&content-type=text/plain'
 	r = requests.get(url)
 	print 'Generating code...'
@@ -236,6 +238,11 @@ def GenerateCode():
 	number = random.randint(0,100)
 	symbol = random.choice(['@','#','$','&','~'])
 	pw = word1 + word2 + symbol + str(number)
+	#if exist, append, else create new file	
+	fh = open(file,'a+')
+	fh.write(pw + ' generated on ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+	fh.write('\n')
+	fh.close()	
 	return pw
 	
 #main
@@ -249,8 +256,7 @@ def main():
 	#op = ReadFolderTree(f,'.py')
 	#SendMail(sender='pjayaraj@amd.com',recipientlist=['pranoy.jayaraj@amd.com'], htmlmsg='TestMessage', subject='Test', serverIP='10.180.168.6')
 	#print CreateHTMLTable([['1','Pranoy','28'],['2','Jayaraj','58']], ['No.', 'Name', 'Age'])
-	
-	print GenerateCode()
+	#print GenerateCode(file=r'C:\KeyCodes\codes.txt')
 	
 if __name__== "__main__":
     main()
