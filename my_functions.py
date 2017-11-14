@@ -4,6 +4,8 @@ import sys
 import shutil
 from email.mime.text import MIMEText
 import smtplib
+import requests
+import random
 
 ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 
@@ -102,7 +104,7 @@ def execute(command):
 	
 	return output,err
 
-#create an html table from a list for RAVEN NIGHTLY BUILD
+#create an html table from a list
 def CreateHTMLTable(list, header):
 	res=''
 	html='<html><head><body>'
@@ -220,6 +222,21 @@ def ReadFolderTree(root,type):
 			if os.path.isdir(temp):
 				ReadFolderTree(temp, type)
 	return op
+
+#gen wkeycodes from https://svnweb.freebsd.org/csrg/share/dict/words?view=co&content-type=text/plain
+def GenerateCode():
+	url = 'https://svnweb.freebsd.org/csrg/share/dict/words?view=co&content-type=text/plain'
+	r = requests.get(url)
+	print 'Generating code...'
+	words_list = r.content.splitlines()
+	word1 = random.choice(words_list)
+	word1 = word1.title()
+	word2 = random.choice(words_list)
+	word2 = word2.title()
+	number = random.randint(0,100)
+	symbol = random.choice(['@','#','$','&','~'])
+	pw = word1 + word2 + symbol + str(number)
+	return pw
 	
 #main
 def main():       
@@ -230,10 +247,10 @@ def main():
 	#print Sort(ord='inc',array=input)
 	#f=r'C:\Users\pjayaraj\Desktop\MyScripts'
 	#op = ReadFolderTree(f,'.py')
-	#for f in op:
-	#	print f
+	#SendMail(sender='pjayaraj@amd.com',recipientlist=['pranoy.jayaraj@amd.com'], htmlmsg='TestMessage', subject='Test', serverIP='10.180.168.6')
+	#print CreateHTMLTable([['1','Pranoy','28'],['2','Jayaraj','58']], ['No.', 'Name', 'Age'])
 	
-	SendMail(sender='pjayaraj@amd.com',recipientlist=['pranoy.jayaraj@amd.com'], htmlmsg='TestMessage', subject='Test', serverIP='10.180.168.6')
+	print GenerateCode()
 	
 if __name__== "__main__":
     main()
