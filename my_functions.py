@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 import shutil
+from email.mime.text import MIMEText
+import smtplib
 
 ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 
@@ -9,31 +11,31 @@ ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 op=[]	
 
 #send mail -- > EDIT
-def SendMail(sender, recipientsList, htmlmsg, subject):
-	text = '@amd.com'
-	#recipients list
-	#recipientsList = ['pranoy.jayaraj','prabhu.ranganathan']
-	
-	recipients = []
-
-	for rec in recipientsList:
-		rec+=text		
-		recipients.append(rec)
-			
+#sender, [recipientsList], htmlmsg, subject, serverIP
+def SendMail(**kwargs):
+	sender=recipientlist=htmlmsg=subject=serverIP=None
+	if kwargs is not None:
+		for k,v in kwargs.iteritems():
+			if k=='sender' : sender=kwargs[k]
+			if k=='recipientlist' : recipientlist=kwargs[k]
+			if k=='htmlmsg' : htmlmsg=kwargs[k]
+			if k=='subject' : subject=kwargs[k]
+			if k=='serverIP' : serverIP=kwargs[k]
+						
 	body = htmlmsg
 	msg = MIMEText(body, 'html')
 	msg['Subject'] = subject
 	msg['From'] = sender
-	msg['To'] = ", ".join(recipients)
+	msg['To'] = ", ".join(recipientlist)
 		
 	#sending
-	session = smtplib.SMTP('10.180.168.6')
+	session = smtplib.SMTP(serverIP)
 	session.ehlo()
 	session.starttls()
 	session.ehlo
 	print 'Sending to recipients:-'
-	print recipients
-	send_it = session.sendmail(sender, recipients, msg.as_string())
+	print recipientlist
+	send_it = session.sendmail(sender, recipientlist, msg.as_string())
 	session.quit()
 
 #read bin contents
@@ -94,7 +96,7 @@ def execute(command):
 	print 'Exit code:-' + str(exitCode)
 	
 	if (exitCode == 0):
-        return output
+		return output
 	else:
 		raise ProcessException(command, exitCode, output)
 	
@@ -226,10 +228,12 @@ def main():
     #print GetIndex(list=['zero','one', 'two'], element='one')
     #print GetMaxMin(input)[0]
 	#print Sort(ord='inc',array=input)
-	f=r'C:\Users\pjayaraj\Desktop\MyScripts'
-	op = ReadFolderTree(f,'.py')
-	for f in op:
-		print f
+	#f=r'C:\Users\pjayaraj\Desktop\MyScripts'
+	#op = ReadFolderTree(f,'.py')
+	#for f in op:
+	#	print f
+	
+	SendMail(sender='pjayaraj@amd.com',recipientlist=['pranoy.jayaraj@amd.com'], htmlmsg='TestMessage', subject='Test', serverIP='10.180.168.6')
 	
 if __name__== "__main__":
     main()
