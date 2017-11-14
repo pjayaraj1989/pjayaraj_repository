@@ -74,3 +74,29 @@ def CreateHTMLTable(**kwargs):
 			html+='</tr>'	
 		html+='</table>'	
 		return html
+		
+#get pairs in the list which will output sum
+def GetPairsForSum(l, sum):
+    output=[]
+    temp_list=[]
+    sub=[]
+    for e in l:
+        temp_list = l[l.index(e):]
+        for t in temp_list:
+            if e + t == 9:
+                output.append((e,t))
+    return output	
+
+#get index of a list element (list, element)
+def GetIndex(**kwargs):
+    if kwargs is not None:
+        for k, v in kwargs.iteritems():
+            if k=='list':
+                list=kwargs[k]
+            if k=='element':
+                element=kwargs[k]
+
+    for i in range(len(list)):
+        if list[i] == element:
+            return i
+	
