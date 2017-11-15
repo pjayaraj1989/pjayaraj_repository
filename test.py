@@ -20,5 +20,5 @@ ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 #print directoryfunctions.ReadFolderTree(r'C:\Users\pjayaraj\Desktop\MyScripts','.py')
 #print generatepasscode.GenerateCode(r'C:\KeyCodes\codes.txt')
 #print processfunctions.execute('dir')
-
-filefunctions.copyfile(ScriptPath + '\\' + 'imag.png', ScriptPath + '\\' + 'image.png')
+#filefunctions.copyfile(ScriptPath + '\\' + 'imag.png', ScriptPath + '\\' + 'image.png')
+filefunctions.Log(ScriptPath+'\\'+'log.log','Log message')
