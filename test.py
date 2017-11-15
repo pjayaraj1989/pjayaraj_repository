@@ -1,8 +1,13 @@
+import os
+
 from sendmail import sendmail
 from listfunctions import listfunctions
 from directoryfunctions import directoryfunctions
 from generatepasscode import generatepasscode
 from processfunctions import processfunctions
+from filefunctions import filefunctions
+
+ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 
 #attachment=r'C:\Users\pjayaraj\Documents\GitHub\pjayaraj_repository\image.png'
 #sendmail.sendmail(sender='pjayaraj@amd.com',recipientlist=['pranoy.jayaraj@amd.com'],
@@ -15,3 +20,5 @@ from processfunctions import processfunctions
 #print directoryfunctions.ReadFolderTree(r'C:\Users\pjayaraj\Desktop\MyScripts','.py')
 #print generatepasscode.GenerateCode(r'C:\KeyCodes\codes.txt')
 #print processfunctions.execute('dir')
+
+filefunctions.copyfile(ScriptPath + '\\' + 'image.png', ScriptPath + '\\' + 'image.png')
