@@ -21,4 +21,4 @@ ScriptPath = os.path.dirname(os.path.abspath( __file__ ))
 #print generatepasscode.GenerateCode(r'C:\KeyCodes\codes.txt')
 #print processfunctions.execute('dir')
 
-filefunctions.copyfile(ScriptPath + '\\' + 'image.png', ScriptPath + '\\' + 'image.png')
+filefunctions.copyfile(ScriptPath + '\\' + 'imag.png', ScriptPath + '\\' + 'image.png')

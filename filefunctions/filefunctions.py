@@ -1,5 +1,10 @@
+import os
 
 def copyfile(src,dest):
+	if not os.path.isfile(src):
+		print 'File {0} does not exist'.format(src)
+		raw_input()
+		exit()
 	#get file extension
 	ext='.' + src.split('.')[-1]
 	if src==dest:
